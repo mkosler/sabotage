@@ -1,0 +1,11 @@
+{
+    name = "Generate",
+    actionText = "Generate 1 stored energy.",
+    energy = 0,
+    lifecycle = 1,
+    priority = 0,
+    type = "Energy",
+    action = function (player, opponent)
+        playerState.setReserve(player, playerState.getReserve(player) + 1)
+    end,
+}

@@ -1,0 +1,11 @@
+{
+    name = "Strike",
+    actionText = "Deal 2 damage to your opponent.",
+    energy = 2,
+    lifecycle = 1,
+    priority = 0,
+    type = "Process",
+    action = function (player, opponent)
+        playerState.setLife(opponent, playerState.getLife(opponent) - 2)
+    end,
+}

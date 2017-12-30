@@ -1,0 +1,11 @@
+{
+    name = "Repair",
+    actionText = "Restore 2 life.",
+    energy = 2,
+    lifecycle = 1,
+    priority = 0,
+    type = "Process",
+    action = function (player, opponent)
+        playerState.setLife(player, playerState.getLife(player) + 2)
+    end,
+}

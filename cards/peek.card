@@ -1,0 +1,17 @@
+{
+    name = "Peek",
+    actionText = "Look at the next 3 cards on top of your opponent's deck.",
+    energy = 4,
+    lifecycle = 1,
+    priority = -1,
+    type = "Process",
+    action = function (player, opponent)
+        local deck = playerState.getDeck(opponent)
+        local count = #deck < 4 and #deck or 4
+        print("Peeking!", count)
+
+        for i = 1, count do
+            print(card.getName(deck[i]))
+        end
+    end
+}
