@@ -7,8 +7,7 @@
     type = "Process",
     action = function (player, opponent)
         local deck = playerState.getDeck(opponent)
-        local count = #deck < 4 and #deck or 4
-        print("Peeking!", count)
+        local count = #deck < 3 and #deck or 3
 
         for i = 1, count do
             print(card.getName(deck[i]))

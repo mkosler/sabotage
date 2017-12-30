@@ -1,0 +1,13 @@
+{
+    name = "Sabotage",
+    actionText = "Swap your opponent's next plan step with their last plan step.",
+    energy = 5,
+    lifecycle = 1,
+    priority = 1,
+    type = "Modification",
+    action = function (player, opponent)
+        local plan = playerState.getPlan(opponent);
+        plan[1], plan[#plan] = plan[#plan], plan[1]
+        playerState.setPlan(opponent, plan)
+    end,
+}

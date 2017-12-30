@@ -38,7 +38,6 @@ void pushCardToLuaStack(lua_State *L, const char *path)
     if (fread(buffer, 1, fSz, f) != fSz) {
         free(buffer);
         fclose(f);
-        fputs("problem reading file\n", stderr);
         fprintf(stderr, "problem reading file (%s)", path);
         exit(1);
     }

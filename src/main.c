@@ -27,23 +27,22 @@ int main()
     opponent->deck[2] = sbtgLibrary_Find(lib, "Repair");
     opponent->deck[3] = sbtgLibrary_Find(lib, "Generate");
 
-    // for (int i = 0; i < DECK_SIZE; i++) {
-    //     if (opponent->deck[i] != NULL) {
-    //         puts(opponent->deck[i]->name);
-    //         puts(opponent->deck[i]->path);
-    //     }
-    // }
+    opponent->plan[0] = sbtgLibrary_Find(lib, "Strike");
+    opponent->plan[1] = sbtgLibrary_Find(lib, "Repair");
 
-    sbtgCard_CallAction(L, sbtgLibrary_Find(lib, "Peek"), player, opponent);
+    for (int i = 0; i < DECK_SIZE; i++) {
+        if (opponent->plan[i] != NULL) {
+            puts(opponent->plan[i]->name);
+        }
+    }
 
-    // sbtgCard_CallAction(L, strike, player, opponent);
+    sbtgCard_CallAction(L, sbtgLibrary_Find(lib, "Sabotage"), player, opponent);
 
-    // for (int i = 0; i < lib->size; i++) {
-    //     if (lib->keys[i] != NULL) {
-    //         printf("Index (%d) | Key (%s)\n", i, lib->keys[i]);
-    //         sbtgCard_Print(lib->cards[i]);
-    //     }
-    // }
+    for (int i = 0; i < DECK_SIZE; i++) {
+        if (opponent->plan[i] != NULL) {
+            puts(opponent->plan[i]->name);
+        }
+    }
 
     sbtgPlayerState_Free(player);
     sbtgPlayerState_Free(opponent);
