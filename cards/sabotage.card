@@ -6,8 +6,8 @@
     priority = 1,
     type = "Modification",
     action = function (player, opponent)
-        local plan = playerState.getPlan(opponent);
+        local plan = opponent:getPlan()
         plan[1], plan[#plan] = plan[#plan], plan[1]
-        playerState.setPlan(opponent, plan)
+        opponent:setPlan(plan)
     end,
 }

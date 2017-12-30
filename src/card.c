@@ -119,23 +119,32 @@ void sbtgCard_Print(struct sbtgCard *card)
 // LUA_BINDINGS
 void sbtgCard_CallAction(lua_State *L, struct sbtgCard *card, struct sbtgPlayerState *player, struct sbtgPlayerState *opponent)
 {
+    struct sbtgPlayerState **pudata = (struct sbtgPlayerState**)lua_newuserdata(L, sizeof(struct sbtgPlayerState*)); // stack: userdata
+    struct sbtgPlayerState **oudata = (struct sbtgPlayerState**)lua_newuserdata(L, sizeof(struct sbtgPlayerState*)); // stack: userdata userdata
+    *pudata = player;
+    *oudata = opponent;
+
+    luaL_getmetatable(L, "sbtg.PlayerState");
+    lua_pushvalue(L, -1);
+    lua_setmetatable(L, 1);
+    lua_setmetatable(L, 2);
+
     pushCardToLuaStack(L, card->path);
 
-    lua_getfield(L, 1, "action");
-    lua_pushlightuserdata(L, player);
-    lua_pushlightuserdata(L, opponent);
+    lua_getfield(L, -1, "action");
+    lua_rotate(L, 1, -2);
 
     if (lua_pcall(L, 2, 0, 0) != LUA_OK) {
         fprintf(stderr, "problem calling action callback: %s\n", lua_tostring(L, -1));
         exit(1);
     }
     
-    lua_pop(L, 3);
+    lua_pop(L, 1);
 }
 
 static int getName(lua_State *L)
 {
-    struct sbtgCard *c = (struct sbtgCard*)lua_touserdata(L, 1);
+    struct sbtgCard *c = *(struct sbtgCard**)luaL_checkudata(L, 1, "sbtg.Card");
     luaL_argcheck(L, c != NULL, 1, "'sbtgCard' expected");
     lua_pushstring(L, c->name);
     return 1;
@@ -143,7 +152,7 @@ static int getName(lua_State *L)
 
 static int getActionText(lua_State *L)
 {
-    struct sbtgCard *c = (struct sbtgCard*)lua_touserdata(L, 1);
+    struct sbtgCard *c = *(struct sbtgCard**)luaL_checkudata(L, 1, "sbtg.Card");
     luaL_argcheck(L, c != NULL, 1, "'sbtgCard' expected");
     lua_pushstring(L, c->actionText);
     return 1;
@@ -151,7 +160,7 @@ static int getActionText(lua_State *L)
 
 static int getEnergy(lua_State *L)
 {
-    struct sbtgCard *c = (struct sbtgCard*)lua_touserdata(L, 1);
+    struct sbtgCard *c = *(struct sbtgCard**)luaL_checkudata(L, 1, "sbtg.Card");
     luaL_argcheck(L, c != NULL, 1, "'sbtgCard' expected");
     lua_pushinteger(L, c->energy);
     return 1;
@@ -159,7 +168,7 @@ static int getEnergy(lua_State *L)
 
 static int getLifecycle(lua_State *L)
 {
-    struct sbtgCard *c = (struct sbtgCard*)lua_touserdata(L, 1);
+    struct sbtgCard *c = *(struct sbtgCard**)luaL_checkudata(L, 1, "sbtg.Card");
     luaL_argcheck(L, c != NULL, 1, "'sbtgCard' expected");
     lua_pushinteger(L, c->lifecycle);
     return 1;
@@ -167,7 +176,7 @@ static int getLifecycle(lua_State *L)
 
 static int getPriority(lua_State *L)
 {
-    struct sbtgCard *c = (struct sbtgCard*)lua_touserdata(L, 1);
+    struct sbtgCard *c = *(struct sbtgCard**)luaL_checkudata(L, 1, "sbtg.Card");
     luaL_argcheck(L, c != NULL, 1, "'sbtgCard' expected");
     lua_pushinteger(L, c->priority);
     return 1;
@@ -175,7 +184,7 @@ static int getPriority(lua_State *L)
 
 static int getType(lua_State *L)
 {
-    struct sbtgCard *c = (struct sbtgCard*)lua_touserdata(L, 1);
+    struct sbtgCard *c = *(struct sbtgCard**)luaL_checkudata(L, 1, "sbtg.Card");
     luaL_argcheck(L, c != NULL, 1, "'sbtgCard' expected");
     lua_pushstring(L, CARD_TYPE_STRINGS[c->type]);
     return 1;
@@ -193,6 +202,9 @@ static const struct luaL_Reg sbtgCardlib[] = {
 
 int luaopen_sbtgCard(lua_State *L)
 {
-    luaL_newlib(L, sbtgCardlib);
+    luaL_newmetatable(L, "sbtg.Card");
+    lua_pushvalue(L, -1);
+    lua_setfield(L, -2, "__index");
+    luaL_setfuncs(L, sbtgCardlib, 0);
     return 1;
 }

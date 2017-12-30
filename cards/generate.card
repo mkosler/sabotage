@@ -6,6 +6,6 @@
     priority = 0,
     type = "Energy",
     action = function (player, opponent)
-        playerState.setReserve(player, playerState.getReserve(player) + 1)
+        player:setReserve(player:getReserve() + 1)
     end,
 }

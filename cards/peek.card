@@ -6,11 +6,12 @@
     priority = -1,
     type = "Process",
     action = function (player, opponent)
-        local deck = playerState.getDeck(opponent)
+        local deck = opponent:getPile("Deck")
         local count = #deck < 3 and #deck or 3
 
+        print("Peeking...", count)
         for i = 1, count do
-            print(card.getName(deck[i]))
+            print(deck[i]:getName())
         end
     end
 }

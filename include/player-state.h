@@ -8,6 +8,7 @@
 #define DECK_SIZE 30
 
 typedef struct sbtgCard *deck_t[DECK_SIZE];
+enum sbtgPlayerStatePileType { Deck, ScrapHeap, Plan };
 
 struct sbtgPlayerState
 {

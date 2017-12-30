@@ -6,6 +6,6 @@
     priority = 0,
     type = "Process",
     action = function (player, opponent)
-        playerState.setLife(opponent, playerState.getLife(opponent) - 2)
+        opponent:setLife(opponent:getLife() - 2)
     end,
 }

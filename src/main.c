@@ -13,9 +13,9 @@ int main()
 {
     lua_State *L = luaL_newstate();
     luaL_openlibs(L);
-    luaL_requiref(L, "card", luaopen_sbtgCard, 1);
+    luaopen_sbtgCard(L);
     lua_pop(L, 1);
-    luaL_requiref(L, "playerState", luaopen_sbtgPlayerState, 1);
+    luaopen_sbtgPlayerState(L);
     lua_pop(L, 1);
 
     struct sbtgPlayerState *player = sbtgPlayerState_New();
@@ -30,19 +30,7 @@ int main()
     opponent->plan[0] = sbtgLibrary_Find(lib, "Strike");
     opponent->plan[1] = sbtgLibrary_Find(lib, "Repair");
 
-    for (int i = 0; i < DECK_SIZE; i++) {
-        if (opponent->plan[i] != NULL) {
-            puts(opponent->plan[i]->name);
-        }
-    }
-
-    sbtgCard_CallAction(L, sbtgLibrary_Find(lib, "Sabotage"), player, opponent);
-
-    for (int i = 0; i < DECK_SIZE; i++) {
-        if (opponent->plan[i] != NULL) {
-            puts(opponent->plan[i]->name);
-        }
-    }
+    sbtgCard_CallAction(L, sbtgLibrary_Find(lib, "Peek"), player, opponent);
 
     sbtgPlayerState_Free(player);
     sbtgPlayerState_Free(opponent);
